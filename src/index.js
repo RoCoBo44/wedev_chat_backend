@@ -3,6 +3,9 @@ import { ApolloServer } from 'apollo-server-express'
 import { createServer } from 'http'
 
 import schema from './schema'
+import resolvers from './schema/resolvers'
+import models from './models'
+import { dedentBlockStringValue } from 'graphql/language/blockString'
 
 require('dotenv').config()
 
@@ -12,10 +15,15 @@ const app = express()
 
 const server = new ApolloServer({
   ...schema,
+  resolvers,
+  context: { models },
   instrospection: true,
   playground: true,
   tracing: true
 })
+
+const Sequelize = require('sequelize');
+
 
 server.applyMiddleware({ app })
 

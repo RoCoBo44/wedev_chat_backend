@@ -2,7 +2,9 @@ import path from 'path'
 import fs from 'fs'
 import { merge } from 'lodash'
 
-let resolvers = {}
+let resolvers = {
+
+}
 
 fs
   .readdirSync(__dirname)
