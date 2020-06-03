@@ -1,6 +1,6 @@
 # Backend proyect for WeDevelop
 
-Made in Javascript using GraphQL, Sequelize and Apollo 
+Made in Javascript using GraphQL, Sequelize and Apollo.
 
 ## Dependencies
 
