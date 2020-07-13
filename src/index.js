@@ -1,13 +1,11 @@
 import express from 'express'
 import { ApolloServer } from 'apollo-server-express'
 import { createServer } from 'http'
-
 import schema from './schema'
-import resolvers from './schema/resolvers'
 import models from './models'
-import { dedentBlockStringValue } from 'graphql/language/blockString'
+import passportMiddleware from './passportMiddleware'
 
-require('dotenv').config()
+require('dotenv').config() 
 
 const port = process.env.PORT || 3001
 
@@ -15,16 +13,13 @@ const app = express()
 
 const server = new ApolloServer({
   ...schema,
-  resolvers,
-  context: { models },
+  context: async ({ req, res }) => ({ models, user: req.user }),
   instrospection: true,
   playground: true,
   tracing: true
 })
 
-const Sequelize = require('sequelize');
-
-
+app.use(passportMiddleware)
 server.applyMiddleware({ app })
 
 const httpServer = createServer(app)
