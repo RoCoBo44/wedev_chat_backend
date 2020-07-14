@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -30,29 +30,29 @@ module.exports = {
         }
       },
       username: {
-          type: Sequelize.STRING,
-          unique: true,
-          allowNull: false,
-          validate: {
-            len: {
-              args: [0, 50],
-              msg: 'Long username'
-            }
+        type: Sequelize.STRING,
+        unique: true,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [0, 50],
+            msg: 'Long username'
           }
+        }
       },
       salt: {
-          type: Sequelize.STRING,
-          allowNull: false
+        type: Sequelize.STRING,
+        allowNull: false
       },
       password: {
-          type: Sequelize.STRING,
-          allowNull: false,
-          validate: {
-            len: {
-              args: [8, 20],
-              msg: 'pass is not between 8 and 20 characters'
-            }
+        type: Sequelize.STRING,
+        allowNull: false,
+        validate: {
+          len: {
+            args: [8, 20],
+            msg: 'pass is not between 8 and 20 characters'
           }
+        }
       },
       createdAt: {
         allowNull: false,
@@ -62,10 +62,10 @@ module.exports = {
         allowNull: true,
         type: Sequelize.DATE
       }
-    });
+    })
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('users');
+    return queryInterface.dropTable('users')
   }
-};
+}

@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 module.exports = {
   up: (queryInterface, Sequelize) => {
@@ -10,10 +10,10 @@ module.exports = {
       salt: 'Doe',
       password: 'Doe',
       createdAt: Sequelize.fn('now')
-    }], {});
+    }], {})
   },
 
   down: (queryInterface, Sequelize) => {
-    return queryInterface.bulkDelete('users', null, {});
+    return queryInterface.bulkDelete('users', null, {})
   }
-};
+}

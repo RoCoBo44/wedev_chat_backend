@@ -1,15 +1,5 @@
-/*
-id (UUID);
-firstName;
-lastName;
-username (unique);
-salt;
-password (MD5 encrypted).
-
-Segun Rami el sal y la pass es problema del futuro
-
-*/
 import crypto from 'crypto'
+const jwt = require('jsonwebtoken')
 
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('user', {
@@ -52,6 +42,18 @@ export default (sequelize, DataTypes) => {
     return User.encryptPassword(value, this.salt) === this.password
   }
 
+  User.prototype.generateJWT = function () {
+    const payload = { 
+      id: this.id, 
+      username: this.username 
+    }
+    const options = {
+      expiresIn: '1d', 
+      subject: this.id 
+    }
+    return jwt.sign(payload, process.env.SECRET, options)
+  }
+
   // Class methods
   User.hashPasswordHook = async function (user) {
     if (!user.password || !user.changed('password')) return user
@@ -68,70 +70,13 @@ export default (sequelize, DataTypes) => {
     return crypto.scryptSync(plainPassword, salt, 64).toString('hex')
   }
 
+  User.findByUsername = function (username) {
+    return this.findOne({ where: { username } })
+  }
+
   // hooks
   User.beforeCreate(User.hashPasswordHook.bind(User))
   User.beforeUpdate(User.hashPasswordHook.bind(User))
 
   return User
 }
-/*
-export default (sequelize, DataTypes) => {
-  const User = sequelize.define('user', {
-      // attributes
-      id: {
-          type: DataTypes.UUID,
-          primaryKey: true,
-          defaultValue: DataTypes.UUIDV4
-        },
-      firstName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          len: {
-            args: [0, 50],
-            msg: 'Long firstname'
-          }
-        }
-      },
-      lastName: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        validate: {
-          len: {
-            args: [0, 70],
-            msg: 'Long lastname'
-          }
-        }
-      },
-      username: {
-          type: DataTypes.STRING,
-          unique: true,
-          allowNull: false,
-          validate: {
-            len: {
-              args: [0, 50],
-              msg: 'Long username'
-            }
-          }
-      },
-      salt: {
-          type: DataTypes.STRING,
-          allowNull: false
-      },
-      password: {
-          type: DataTypes.STRING,
-          allowNull: false,
-          validate: {
-            len: {
-              args: [8, 20],
-              msg: 'pass is not between 8 and 20 characters'
-            }
-          }
-      }
-      
-    }, {
-      // options
-    });
-  return User
-}
-*/
