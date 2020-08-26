@@ -8,6 +8,7 @@ export default {
     signup: async (parent, args, context, info) => {
 
       const user = await context.models.user.findByUsername(args.data.username)
+
       if (user) return { authError: 'user exist' }
 
       const newUser = await context.models.user.create(args.data)
